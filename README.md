@@ -171,6 +171,10 @@ if (vm <= VM_THRESHOLD) {
 }
 This prevents reverse current or damage when USB power is removed.
 
+Demonstration video
+
+[https://youtube.com/shorts/SCNSbipFZcw?feature=share](https://www.youtube.com/shorts/SCNSbipFZcw)
+
 
 🧰 Libraries Used
 Adafruit_BNO055
