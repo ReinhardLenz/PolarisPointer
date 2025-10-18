@@ -41,7 +41,7 @@ The system is powered through a **USB-C connection**, and a voltage monitor ensu
 | Component | Description |
 |------------|--------------|
 | **Arduino UNO** | ATmega328P-based microcontroller with 14 digital I/O and 6 analog inputs |
-| **Trimmer Potentiometer (10kΩ)** | Used for input adjustment or testing |
+| **Trimmer Potentiometer (10kΩ)** | Can be used for input adjustment or testing |
 | **TB6612FNG Motor Driver** | Dual-channel motor driver for N20 gear motor |
 | **N20 Motor with Encoder** | Small DC gear motor with dual-channel encoder for feedback |
 | **USB-C to 2-wire cable** | Power input |
