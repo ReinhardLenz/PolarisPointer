@@ -182,14 +182,6 @@ Adafruit_Sensor
 
 Wire (built-in)
 
-🧑‍💻 Future Improvements
-Add integral or derivative terms (PI/PID control)
-
-Implement target filtering for smoother movement
-
-Add OLED display to show heading and status
-
-Replace Arduino UNO with a 3.3 V board (e.g., Due or ESP32) to remove logic converter
 
 📜 License
 MIT License © 2025 Reinhard Lenz
