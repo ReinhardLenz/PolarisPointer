@@ -186,3 +186,5 @@ Wire (built-in)
 MIT License © 2025 Reinhard Lenz
 
 
+![Visitor Count](https://komarev.com/ghpvc/?username=ReinhardLenz&repo=PolarisPointer&color=green)
+
