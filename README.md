@@ -152,14 +152,15 @@ returning a heading angle between 0°–360°.
 This separation makes the main sketch cleaner and modular.
 
 🧮 Control Logic Summary
-|Variable	|Description|
-|heading|	Current direction from IMU (0–360°)|
-|continuousHeading|	Accumulated heading (unwraps 0°↔360°)|
-|targetEnc|	Desired motor encoder position|
-|currentEnc|	Encoder feedback|
-|error|	Difference between target and current position|
-|pwm	|Motor power output (0–255) proportional to error|
-|VM|	Measured motor voltage (for power safety)|
+| Variable	|Description |
+|------------|--------------|
+| heading |	Current direction from IMU (0–360°) |
+| continuousHeading |	Accumulated heading (unwraps 0°↔360°) |
+| targetEnc |	Desired motor encoder position |
+| currentEnc |	Encoder feedback |
+| error |	Difference between target and current position |
+| pwm	|Motor power output (0–255) proportional to error |
+| VM |	Measured motor voltage (for power safety) |
 
 🔋 Power Safety
 The VM voltage (motor supply) is monitored via a voltage divider.
