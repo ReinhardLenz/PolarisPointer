@@ -1,187 +1,207 @@
-# PolarisPointer
+# PolarisPointer 🌐  
+*A North-seeking motor control system using Arduino, BNO055 IMU, and TB6612FNG motor driver*
+
+---
+
+## 🧭 Summary
+
+**PolarisPointer** is a circuit and program designed to control a geared N20 DC motor with an integrated encoder using an **Arduino UNO** and a **TB6612FNG motor driver**.  
+The Arduino reads heading data from a **BNO055** 9-axis IMU sensor (via a logic level converter for voltage matching), computes the **north direction**, and then continuously adjusts the motor so that a **mechanical visor or laser pointer** always points toward **true north**, regardless of how the base device is oriented.  
+
+Motor control is achieved using a **proportional feedback algorithm** (P-controller).  
+The system is powered through a **USB-C connection**, and a voltage monitor ensures that if the USB power is disconnected, the motor driver is safely disabled to prevent damage.
+
+---
+
+## ⚙️ Features
+
+- Uses **BNO055** sensor to determine absolute heading (0–360°)
+- **Closed-loop motor control** via encoder feedback
+- Smooth handling of **heading wrap-around (0° ↔ 360°)**
+- Automatic **power monitoring** and motor driver disable on undervoltage
+- Built entirely with **Arduino UNO**, **TB6612FNG**, **N20 encoder motor**, and **logic level converter**
+
+---
+
+## 🧩 Circuit Diagram
+
+
+<img width="3000" height="3542" alt="circuit_image" src="https://github.com/user-attachments/assets/8fd2b257-867d-4dae-8831-57cb2753e0f2" />
+
+---
+
+## 🧰 Breadboard Prototype
+
+![photo](https://github.com/user-attachments/assets/f687797e-0839-41bb-8ade-041c8ec2b41b)
+
+---
+
+## 🔧 Component List
+
+| Component | Description |
+|------------|--------------|
+| **Arduino UNO** | ATmega328P-based microcontroller with 14 digital I/O and 6 analog inputs |
+| **Trimmer Potentiometer (10kΩ)** | Used for input adjustment or testing |
+| **TB6612FNG Motor Driver** | Dual-channel motor driver for N20 gear motor |
+| **N20 Motor with Encoder** | Small DC gear motor with dual-channel encoder for feedback |
+| **USB-C to 2-wire cable** | Power input |
+| **Resistors (100kΩ & 33kΩ)** | Voltage divider for VM voltage sensing |
+| **Logic Level Converter** | Shifts I2C lines between 5V (UNO) and 3.3V (BNO055) |
+| **BNO055** | Intelligent 9-axis absolute orientation sensor |
+
+---
+
+## 🔌 Wiring Details
+
+### Arduino UNO Connections
+- **5V** → Trimmer leg2, Logic Level Converter HV, TB6612FNG VCC  
+- **GND** → Logic Level Converter GND, Motor GND (Blue), TB6612FNG GND, Trimmer leg1  
+- **D9** → TB6612FNG STBY  
+- **D5** → TB6612FNG PWMA  
+- **D4** → TB6612FNG AI2  
+- **D10** → TB6612FNG AI1  
+- **A0** → Trimmer wiper  
+- **A1** → Voltage divider node (33kΩ)  
+- **3.3V** → BNO055 3VO, Logic Level Converter LV, Motor encoder VCC (Black)  
+- **D3, D2** → Encoder outputs (Green, Yellow)  
+- **A4, A5** → I2C to Logic Level Converter HV4/HV2 (SDA/SCL)
+
+### Trimmer Potentiometer
+•	**leg2** →  connected to Arduino UNO 5V.
+- **wipe** →  connected to Arduino UNO A0.
+- **leg1** →  connected to Resistor pin2 (33k Ohms) and Arduino UNO GND.
+### TB6612FNG Motor Driver
+- **VCC** →  connected to Arduino UNO 5V.
+- **GND** →  connected to Arduino UNO GND and USB C to 2 Wires -.
+- **STBY** →  connected to Arduino UNO D9.
+- **PWMA** →  connected to Arduino UNO D5.
+- **AI2** →  connected to Arduino UNO D4.
+- **AI1** →  connected to Arduino UNO D10.
+- **A02** →  connected to Motor N20 with Encoder Red:M2.
+- **A01** →  connected to Motor N20 with Encoder White:M1.
+- **VM** →  connected to USB C to 2 Wires + and Resistor pin1 (100k Ohms).
+### Motor N20 with Encoder
+- **Red:M2** →  connected to TB6612FNG Motor Driver A02.
+- **White:M1** →  connected to TB6612FNG Motor Driver A01.
+- **Blue:GND** →  connected to Arduino UNO GND.
+- **Black:VCC** →  connected to Arduino UNO 3.3V.
+- **Yellow:C2** →  connected to Arduino UNO D2.
+- **Green:C1** →  connected to Arduino UNO D3.
+### USB C to 2 Wires
+- **+** →  connected to TB6612FNG Motor Driver VM.
+- **-** →  connected to TB6612FNG Motor Driver GND.
+### Resistors
+- **100k  Ohms** →  Resistor: pin1 connected to TB6612FNG Motor Driver VM, pin2 connected to 33k Ohms Resistor pin1.
+- **33k Ohms** →  Resistor: pin1 connected to Arduino UNO A1, pin2 connected to Trimmer Potentiometer leg1.
+### Logic Level Converter
+- **HV** →  connected to Arduino UNO 5V.
+- **GND** →  connected to Arduino UNO GND.
+- **LV** →  connected to Arduino UNO 3.3V.
+- **HV4** →  connected to Arduino UNO A4.
+- **HV2** →  connected to Arduino UNO A5.
+- **LV2** →  connected to BNO055 SCL.
+- **LV4** →  connected to BNO055 SDA.
+### BNO055
+- **3vo** →  connected to Arduino UNO 3.3V.
+- **GND** →  connected to Logic Level Converter GND.
+- **SDA** →  connected to Logic Level Converter LV4.
+- **SCL** →  connected to Logic Level Converter LV2.
 
-Circuit Documentation
-#Summary
-A circuit, which is designed to control a N20 motor gear combination with integrated encoder using an Arduino UNO through a TB6612FNG motor driver. The arduino reads the heading from a BNO055 inertial measurement sensor for orientation data . This IMU sensor is connected via a logic level converter to manage voltage levels between components. The Arduino UNO calculates, where north direction is and uses it to control the motor's position, so that the motor moves a mechanical visor (that could also be a laser pointer) which then always shows into the north direction however in which direction the user of this device is oriented, using a proportional control algorithm. The motor itself is powered via a USB C connection. A disconnection of the USB C is detected, and then the motor is not moved, to avoid potential destruction of TB6612FNG because of too high internal currents.
+---
 
-Circuit diagram:
+## 🧠 Program Explanation
 
-<img width="3000" height="3542" alt="circuit_image" src="https://github.com/user-attachments/assets/855507f6-ab64-4523-b374-3259bf076e7b" />
+The software consists of two main modules:
 
-Photo of the Breadboard with the component and the motor
+### 1. **Main Control (BNO055_TB6612_Encoder_ClosedLoop.ino)**
+- Initializes the motor driver, encoder, and BNO055 sensor.  
+- Continuously reads the **heading** (0–360°) from the IMU.  
+- Converts this heading to a **continuous heading value** (`continuousHeading`), which unwraps smoothly across 0°/360° using:
+  ```cpp
+  if (delta > 180.0) delta -= 360.0;
+  else if (delta < -180.0) delta += 360.0;
+  continuousHeading += delta;
+This prevents jumps when crossing North.
 
+The target encoder position is computed as:
 
-![photo](https://github.com/user-attachments/assets/815cff2c-e9f9-44c5-9cdb-3f72e236dc5f)
+cpp
+Copier le code
+targetEnc = -(long)(continuousHeading * SCALE_DEG_TO_ENC);
+where SCALE_DEG_TO_ENC maps one degree of heading to encoder counts.
 
+The error between target and actual encoder position:
 
-Component List
+cpp
+Copier le code
+error = targetEnc - currentEnc;
+is used in a proportional control law:
 
-1.	Arduino UNO
+cpp
+Copier le code
+pwm = Kp * abs(error);
+to drive the motor until the pointer aligns with the north heading.
 
-o	Description: A microcontroller board based on the ATmega328P.
+The motor direction is determined by the sign of error, and the driver is enabled only when USB voltage is present (VM > 3.5V).
 
-o	Pins: 30 digital I/O pins, 6 analog inputs, USB connection, power jack, ICSP header, and a reset button.
+2. Compass Module (Compass.cpp / Compass.h)
+Encapsulates all BNO055 communication:
 
-0.	Trimmer Potentiometer
+Initializes the IMU, checks connection, and sets it to use the external crystal.
 
-o	Description: A variable resistor used to adjust the input voltage.
+Provides a clean method:
 
-o	Resistance: 10,000 Ohms
+cpp
+Copier le code
+float heading = compass.getHeading();
+returning a heading angle between 0°–360°.
 
-o	Pins: leg1, wiper, leg2
+This separation makes the main sketch cleaner and modular.
 
-0.	TB6612FNG Motor Driver
+🧮 Control Logic Summary
+Variable	Description
+heading	Current direction from IMU (0–360°)
+continuousHeading	Accumulated heading (unwraps 0°↔360°)
+targetEnc	Desired motor encoder position
+currentEnc	Encoder feedback
+error	Difference between target and current position
+pwm	Motor power output (0–255) proportional to error
+VM	Measured motor voltage (for power safety)
 
-o	Description: A dual motor driver capable of driving two DC motors or one stepper motor.
+🔋 Power Safety
+The VM voltage (motor supply) is monitored via a voltage divider.
 
-o	Pins: GND, B01, B02, A02, A01, VCC, VM, PWMB, BI2, BI1, STBY, AI1, AI2, PWMA
+If it drops below the threshold (≈3.5 V), the motor driver is disabled:
 
-0.	Motor N20 with Encoder
+cpp
+Copier le code
+if (vm <= VM_THRESHOLD) {
+    digitalWrite(stby, LOW);
+}
+This prevents reverse current or damage when USB power is removed.
 
-o	Description: A small DC motor with an integrated encoder for feedback.
+📷 Demonstration
+(Add photos or videos of the setup here)
 
-o	Pins: Red (Motor Power +), Black (Coding Power supply +), Yellow (feedback signal A), Green (feedback signal B), Blue (GND), White (Motor Power -)
+🧰 Libraries Used
+Adafruit_BNO055
 
-0.	USB C to 2 Wires
+Encoder
 
-o	Description: Provides power to the circuit.
+Adafruit_Sensor
 
-o	Pins: USB C, +, -
+Wire (built-in)
 
-0.	Resistor (100k Ohms)
+🧑‍💻 Future Improvements
+Add integral or derivative terms (PI/PID control)
 
-o	Description: A fixed resistor used in the voltage divider.
+Implement target filtering for smoother movement
 
-o	Pins: pin1, pin2
+Add OLED display to show heading and status
 
-0.	Resistor (33k Ohms)
+Replace Arduino UNO with a 3.3 V board (e.g., Due or ESP32) to remove logic converter
 
-o	Description: A fixed resistor used in the voltage divider.
-
-o	Pins: pin1, pin2
-
-0.	Logic Level Converter
-
-o	Description: Converts voltage levels between components.
-
-o	Pins: HV1, HV2, HV, GND, HV3, HV4, LV1, LV2, LV, LV3, LV4
-
-0.	BNO055
-
-o	Description: An intelligent 9-axis absolute orientation sensor.
-
-o	Pins: Vin, 3vo, GND, SDA, SCL, RST
-
-Wiring Details
-
-Arduino UNO
-
-•	5V connected to Trimmer Potentiometer leg2, Logic Level Converter HV, and TB6612FNG Motor Driver VCC.
-
-•	GND connected to Logic Level Converter GND, Motor N20 with Encoder Blue:GND, TB6612FNG Motor Driver GND, and Trimmer Potentiometer leg1.
-
-•	D9 connected to TB6612FNG Motor Driver STBY.
-
-•	D5 connected to TB6612FNG Motor Driver PWMA.
-
-•	D4 connected to TB6612FNG Motor Driver AI2.
-
-•	D10 connected to TB6612FNG Motor Driver AI1.
-
-•	A0 connected to Trimmer Potentiometer wiper.
-
-•	A1 connected to Resistor pin1 (33k Ohms).
-
-•	3.3V connected to BNO055 3vo, Logic Level Converter LV, and Motor N20 with Encoder Black:VCC.
-
-•	D3 connected to Motor N20 with Encoder Green:C1.
-
-•	D2 connected to Motor N20 with Encoder Yellow:C2.
-
-•	A4 connected to Logic Level Converter HV4.
-
-•	A5 connected to Logic Level Converter HV2.
-
-Trimmer Potentiometer
-
-•	leg2 connected to Arduino UNO 5V.
-
-•	wiper connected to Arduino UNO A0.
-
-•	leg1 connected to Resistor pin2 (33k Ohms) and Arduino UNO GND.
-
-TB6612FNG Motor Driver
-
-•	VCC connected to Arduino UNO 5V.
-
-•	GND connected to Arduino UNO GND and USB C to 2 Wires -.
-
-•	STBY connected to Arduino UNO D9.
-
-•	PWMA connected to Arduino UNO D5.
-
-•	AI2 connected to Arduino UNO D4.
-
-•	AI1 connected to Arduino UNO D10.
-
-•	A02 connected to Motor N20 with Encoder Red:M2.
-
-•	A01 connected to Motor N20 with Encoder White:M1.
-
-•	VM connected to USB C to 2 Wires + and Resistor pin1 (100k Ohms).
-
-Motor N20 with Encoder
-
-•	Red:M2 connected to TB6612FNG Motor Driver A02.
-
-•	White:M1 connected to TB6612FNG Motor Driver A01.
-
-•	Blue:GND connected to Arduino UNO GND.
-
-•	Black:VCC connected to Arduino UNO 3.3V.
-
-•	Yellow:C2 connected to Arduino UNO D2.
-
-•	Green:C1 connected to Arduino UNO D3.
-
-USB C to 2 Wires
-
-•	+ connected to TB6612FNG Motor Driver VM.
-
-•	- connected to TB6612FNG Motor Driver GND.
-
-Resistors
-
-•	100k Ohms Resistor: pin1 connected to TB6612FNG Motor Driver VM, pin2 connected to 33k Ohms Resistor pin1.
-
-•	33k Ohms Resistor: pin1 connected to Arduino UNO A1, pin2 connected to Trimmer Potentiometer leg1.
-
-Logic Level Converter
-
-•	HV connected to Arduino UNO 5V.
-
-•	GND connected to Arduino UNO GND.
-
-•	LV connected to Arduino UNO 3.3V.
-
-•	HV4 connected to Arduino UNO A4.
-
-•	HV2 connected to Arduino UNO A5.
-
-•	LV2 connected to BNO055 SCL.
-
-•	LV4 connected to BNO055 SDA.
-
-BNO055
-
-•	3vo connected to Arduino UNO 3.3V.
-
-•	GND connected to Logic Level Converter GND.
-
-•	SDA connected to Logic Level Converter LV4.
-
-•	SCL connected to Logic Level Converter LV2.
-
-
+📜 License
+MIT License © 2025 Reinhard Lenz
 
 
