@@ -125,20 +125,16 @@ This prevents jumps when crossing North.
 
 The target encoder position is computed as:
 
-cpp
-Copier le code
 targetEnc = -(long)(continuousHeading * SCALE_DEG_TO_ENC);
 where SCALE_DEG_TO_ENC maps one degree of heading to encoder counts.
 
 The error between target and actual encoder position:
 
-cpp
-Copier le code
+
 error = targetEnc - currentEnc;
 is used in a proportional control law:
 
-cpp
-Copier le code
+
 pwm = Kp * abs(error);
 to drive the motor until the pointer aligns with the north heading.
 
@@ -150,9 +146,6 @@ Encapsulates all BNO055 communication:
 Initializes the IMU, checks connection, and sets it to use the external crystal.
 
 Provides a clean method:
-
-cpp
-Copier le code
 float heading = compass.getHeading();
 returning a heading angle between 0°–360°.
 
@@ -173,15 +166,12 @@ The VM voltage (motor supply) is monitored via a voltage divider.
 
 If it drops below the threshold (≈3.5 V), the motor driver is disabled:
 
-cpp
-Copier le code
+
 if (vm <= VM_THRESHOLD) {
     digitalWrite(stby, LOW);
 }
 This prevents reverse current or damage when USB power is removed.
 
-📷 Demonstration
-(Add photos or videos of the setup here)
 
 🧰 Libraries Used
 Adafruit_BNO055
