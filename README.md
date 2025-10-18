@@ -130,10 +130,8 @@ where SCALE_DEG_TO_ENC maps one degree of heading to encoder counts.
 
 The error between target and actual encoder position:
 
-
 error = targetEnc - currentEnc;
 is used in a proportional control law:
-
 
 pwm = Kp * abs(error);
 to drive the motor until the pointer aligns with the north heading.
@@ -143,7 +141,7 @@ The motor direction is determined by the sign of error, and the driver is enable
 2. Compass Module (Compass.cpp / Compass.h)
 Encapsulates all BNO055 communication:
 
-Initializes the IMU, checks connection, and sets it to use the external crystal.
+Initializes the IMU, checks connection, and sets it to use.
 
 Provides a clean method:
 float heading = compass.getHeading();
