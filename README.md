@@ -36,6 +36,13 @@ The system is powered through a **USB-C connection**, and a voltage monitor ensu
 
 ---
 
+
+## Demonstration video
+
+[https://youtube.com/shorts/SCNSbipFZcw?feature=share](https://www.youtube.com/shorts/SCNSbipFZcw)
+
+---
+
 ## 🔧 Component List
 
 | Component | Description |
@@ -170,10 +177,6 @@ if (vm <= VM_THRESHOLD) {
     digitalWrite(stby, LOW);
 }
 This prevents reverse current or damage when USB power is removed.
-
-Demonstration video
-
-[https://youtube.com/shorts/SCNSbipFZcw?feature=share](https://www.youtube.com/shorts/SCNSbipFZcw)
 
 
 🧰 Libraries Used
