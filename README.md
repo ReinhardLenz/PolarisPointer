@@ -45,6 +45,12 @@ The system is powered through a **USB-C connection**, and a voltage monitor ensu
 
 ## 🔧 Component List
 
+Shopping basket link, with more details:
+
+https://linktr.ee/polarispointer
+
+
+
 | Component | Description |
 |------------|--------------|
 | **Arduino UNO** | ATmega328P-based microcontroller with 14 digital I/O and 6 analog inputs |
